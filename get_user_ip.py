@@ -1,8 +1,11 @@
-# coding=utf-8
+import hashlib
 import socket
+import requests
+from bs4 import BeautifulSoup
 
 
 def get_ip():
+    '''获取本机局域网的IP地址'''
     result = []
     # 获取本机电脑名
     user_name = socket.getfqdn(socket.gethostname())
@@ -14,5 +17,38 @@ def get_ip():
     return result
 
 
-for item in get_ip():
-    print(item)
+#
+# for item in get_ip():
+#     print(item)
+
+
+
+def get_outside_ip():
+    '''获取本机连接外网的ip地址'''
+    url = r'http://www.whereismyip.com/'
+    r = requests.get(url)
+    bTag = BeautifulSoup(r.txt, 'html.parser', from_encoding='utf-8').find('b')
+    ip = ''.join(bTag.stripped_strings)
+    print('ip:' + ip)
+
+
+def get_data_identification(*args):
+    '''对本机ip, 进行sha256哈希算法加密，获取摘要，来做数据标识'''
+    id_items = args
+    d = hashlib.sha256()
+    for item in id_items:
+        d.update(item.encode())
+        print(d.hexdigest())
+
+
+if __name__ == '__main__':
+    # get_outside_ip()
+    # usr_name = get_ip()[:1]
+    # print(usr_name)
+    # usr_ip = get_ip()[1]
+    # print(usr_ip,type(usr_ip))
+    # c = hashlib.sha256()
+    # c.update(usr_name)
+    # print(c.hexdigest())
+    id_event = get_ip()
+    get_data_identification(id_event)
