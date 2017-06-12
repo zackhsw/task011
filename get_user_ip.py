@@ -32,23 +32,35 @@ def get_outside_ip():
     print('ip:' + ip)
 
 
-def get_data_identification(*args):
+def get_data_identification(args):
     '''对本机ip, 进行sha256哈希算法加密，获取摘要，来做数据标识'''
-    id_items = args
+    # id_items = args
+    id_str = "".join(args)
     d = hashlib.sha256()
-    for item in id_items:
-        d.update(item.encode())
-        print(d.hexdigest())
+    d.update(id_str.encode())
+    print(d.hexdigest())
+    # for item in args:
+    #     d.update(item.encode())
+    #     print(d.hexdigest())
+
+
+def get_out_ip():
+    url = r'http://1212.ip138.com/ic.asp'
+    r = requests.get(url)
+    print(r)
+    txt = r.text
+    ip = txt[txt.find("[") + 1: txt.find("]")]
+    print('ip:' + ip )
+    print(type(ip))
+    return ip
 
 
 if __name__ == '__main__':
     # get_outside_ip()
-    # usr_name = get_ip()[:1]
-    # print(usr_name)
-    # usr_ip = get_ip()[1]
-    # print(usr_ip,type(usr_ip))
-    # c = hashlib.sha256()
-    # c.update(usr_name)
-    # print(c.hexdigest())
-    id_event = get_ip()
-    get_data_identification(id_event)
+    get_out_ip()
+
+
+    # 调用本地计算机的用户名与ip 并实现hash算法标识
+    # id_event = get_ip()
+    # print(id_event)
+    # get_data_identification(id_event)
